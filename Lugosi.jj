@@ -23,8 +23,21 @@ SKIP :
 TOKEN :
 {
   <MAIN: "main">
-| <ACHAVES: "{">
-| <FCHAVES: "}">
+| <APAR: "(">
+| <FPAR: ")">
+| <ACHV: "{">
+| <FCHV: "}">
+| <ATRIB: ":=">
+| <FL: ";">
+| <IF: "if">
+| <WHILE: "while">
+| <DO: "do">
+| <RETURN: "return">
+| <PRINT: "print">
+| <INT: "int">
+| <BOOL: "bool">
+| <FUNC: "function">
+| <CONSTB:   "true"|"false">
 }
 
 TOKEN :
@@ -44,17 +57,16 @@ void Lugosi () :
 //Func()?
   <EOF> 
 }
-	
 
 void Main ():
 {}
 {
- <MAIN> <ACHAVES> 
+ <MAIN> <ACHV> 
  
  // VarDecl()
  // SeqComandos()
 
- <FCHAVES>
+ <FCHV>
 
 }
 
