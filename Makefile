@@ -8,7 +8,7 @@ FILE ?= minimal.lug
 
 all: $(MAIN_CLASS).class
 
-$(MAIN_CLASS).class:
+$(MAIN_CLASS).class: Lugosi.jj
 	$(JCC) Lugosi.jj
 	$(JC)  *.java
 
