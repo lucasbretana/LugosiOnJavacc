@@ -38,11 +38,17 @@ TOKEN :
 | <BOOL: "bool">
 | <FUNC: "function">
 | <CONSTB:   "true"|"false">
+| <COMMA: ",">
+| <UNDER: "_">
+| <VAR: "var">
 }
 
 TOKEN :
 {
-  <OP: ("+" | "-" | "*" | "/" | "&&" | "||" | "<" | ">" | "==")>
+  <plus: "+">
+  | <minus: "-">
+  | <e: "E">
+  | <OP: ("+" | "-" | "*" | "/" | "&&" | "||" | "<" | ">" | "==")>
 //  | <ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])*>
 }
 
@@ -52,25 +58,92 @@ TOKEN :
   | <digito: ["0"-"9"]>
 }
 
-TOKEN :
-{
-  <digitos: (<digito>)+>
-  | <facao_opt: (","<digitos>)?>
-  | <expoente_opt: ("E" ("+"|"-")? <digitos>)?>
-  | <letradigito: (<letra> | <digito>)>
+void Digits (): {}
+{ 
+  (<digito>)+
 }
 
-TOKEN :
+void FracaoOpt (): {}
 {
-  <finalsublinhado: "_"(<letradigito>)+>
+  (<COMMA> Digits())?
+}
+
+void ExpOpt (): {}
+{
+  (<e>(<plus> | <minus>)? Digits())?
+}
+
+void AlphaNumeric (): {}
+{
+  <letra>|<digito>
+}
+
+void EndUnderscore (): {}
+{
+  <UNDER>(AlphaNumeric())+
+}
+
+void Id (): {}
+{
+  (<letra>)(AlphaNumeric())*(EndUnderscore())*
+}
+
+void Literal (): {}
+{
+    Digits() FracaoOpt() ExpOpt()
+}
+
+void Type (): {}
+{
+  ( <INT>|<BOOL>)*
 }
 
 void Main (): {}
 {
  <MAIN> <ACHV> 
- // VarDecl()
+ VarDecl()
  (Comando())*
  <FCHV>
+}
+
+void ListaExp (): {} 
+{
+  Exp() //| ListaExp() <COMMA> Exp()
+} // With a single ID for test propouses
+
+void VarDecl (): {}
+{
+  //VarDecl() 
+  <VAR> Type() Id() <FL>
+}
+
+// ---------------
+
+void Exp(): {} 
+{
+  <APAR> Exp() <OP> Exp() <FPAR> |  Fator()
+}
+
+void Fator(): {} 
+{
+  LOOKAHEAD(2) Id() | Id() <APAR> (ListaExp())? <FPAR> | Literal() | <CONSTB>
+}
+
+void Func (): {}
+{
+  //Func() <FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() BlocoComando() <FCHV>
+  //| 
+  <FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() BlocoComando() <FCHV>
+}
+
+void ListArg (): {}
+{
+  Type() Id() //| ListArg() <COMMA> Type() Id()
+}
+void Lugosi () : {}
+{ 
+  Func()
+  <EOF>
 }
 
 void Comando(): {}
@@ -83,63 +156,5 @@ void Comando(): {}
 | <RETURN> Exp() <FL>
 | <PRINT> <APAR> Exp() <FPAR> <FL>
 }
+
 void BlocoComando(): {} { <ACHV> (Comando())* <FCHV> }
-void ListaExp(): {} {Id()} // With a single ID for test propouses
-
-// ---------------
-
-void Id (): {}
-{
-  (<letra>)(<letradigito>)*(<finalsublinhado>)*
-}
-
-void Literal (): {}
-{
-    <digitos><facao_opt><expoente_opt>
-}
-
-void Tipo (): {}
-{
-  ( <INT>|<BOOL>)*
-}
-
-void Exp(): {} 
-{
-  <APAR> Exp() <OP> Exp() <FPAR> //|  Fator()
-}
-
-/*
-void Fator(): {}
-{Id()}
-void ListaExp(): {} {Id()} 
-*/
-void Test (): {}
-{
-  <letra>
-  <digito>
-  <digitos>
-  <facao_opt>
-  <expoente_opt>
-  <expoente_opt>
-  <expoente_opt>
-  <finalsublinhado>
-}
-void Test2 (): {}
-{
-  Id()
-  Id()
-  Literal()
-  Literal()
-  Literal()
-  Literal()
-  Literal()
-  Literal()
-  Literal()
-  Literal()
-}
-
-void Lugosi () : {}
-{ 
-  Literal()
-  Id()
-}
