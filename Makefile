@@ -8,13 +8,13 @@ FILE ?= minimal.lug
 
 all: $(MAIN_CLASS).class
 
-$(MAIN_CLASS).class: Lugosi.jj
-	$(JCC) Lugosi.jj
-	$(JC)  *.java
+build/bin/$(MAIN_CLASS).class: Lugosi.jj
+	$(JCC) -OUTPUT_DIRECTORY=build/src Lugosi.jj
+	$(JC)  build/src/*.java -d build/bin
 
-run: $(MAIN_CLASS).class
-	$(J) $(MAIN_CLASS) $(FILE)
+run: build/bin/$(MAIN_CLASS).class
+	$(J) -cp build/bin/ $(MAIN_CLASS) $(FILE)
 
 clean:
-	rm -rf *.java
-	rm -rf *class
+	rm -rf build/src/*.java
+	rm -rf build/bin/*class
