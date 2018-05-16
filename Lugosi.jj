@@ -65,12 +65,39 @@ TOKEN :
   <finalsublinhado: "_"(<letradigito>)+>
 }
 
+TOKEN :
+{
+  <ID: "id">
+}
+
 void Lugosi () : {}
 { 
   Test()
 
 }
 
+void Main (): {}
+{
+ <MAIN> <ACHV> 
+ // VarDecl()
+ (Comando())*
+ <FCHV>
+}
+
+void Comando(): {}
+{ LOOKAHEAD(2)
+  <ID> <ATRIB> Exp() <FL>
+| <ID> <APAR> (ListaExp())? <FPAR> <FL>
+| <IF> <APAR> Exp() <FPAR> BlocoComando() <FL>
+| <WHILE> <APAR> Exp() <FPAR> <DO> BlocoComando() <FL>
+| <DO> BlocoComando() <WHILE> <APAR> Exp() <FPAR> <FL>
+| <RETURN> Exp() <FL>
+| <PRINT> <APAR> Exp() <FPAR> <FL>
+}
+void BlocoComando(): {} { <ACHV> (Comando())* <FCHV> }
+void ListaExp(): {} {<ID>} // With a single ID for test propouses
+
+// ---------------
 void Test (): {}
 {
   <letra>
@@ -81,16 +108,6 @@ void Test (): {}
   <expoente_opt>
   <expoente_opt>
   <finalsublinhado>
-}
-
-void Main (): {}
-{
- <MAIN> <ACHV> 
- 
- // VarDecl()
- // SeqComandos()
-
- <FCHV>
 }
 
 void Tipo (): {}
