@@ -1,0 +1,13 @@
+main {
+  var int i;
+  var bool b;
+}
+
+function int fib (int i) {
+  bool b1, bool b2;
+
+  while(true) do {
+    print ( b1 );
+  }
+
+}

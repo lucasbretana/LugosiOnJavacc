@@ -108,16 +108,19 @@ void Main (): {}
 
 void ListaExp (): {} 
 {
-  Exp() //| ListaExp() <COMMA> Exp()
+  Exp() ListaExpAux() //| ListaExp() <COMMA> Exp()
 } // With a single ID for test propouses
+
+void ListaExpAux (): {}
+{
+  LOOKAHEAD(2) <COMMA> Exp() ListaExpAux() | Empty()
+}
+
 
 void VarDecl (): {}
 {
-  //VarDecl() 
-  <VAR> Type() Id() <FL>
+  (<VAR> Type() Id() <FL>)*
 }
-
-// ---------------
 
 void Exp(): {} 
 {
@@ -131,18 +134,33 @@ void Fator(): {}
 
 void Func (): {}
 {
-  //Func() <FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() BlocoComando() <FCHV>
-  //| 
-  <FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() BlocoComando() <FCHV>
+  <FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() (Comando())* <FCHV> FuncAux()
+}
+
+void FuncAux (): {}
+{
+  Empty() | <FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() (Comando())* <FCHV> FuncAux()
+}
+
+void Empty (): {}
+{
+  ""|<EOF>
 }
 
 void ListArg (): {}
 {
-  Type() Id() //| ListArg() <COMMA> Type() Id()
+  Type() Id() ListArgAux() //| ListArg() <COMMA> Type() Id()
 }
+
+void ListArgAux (): {}
+{
+  <COMMA> Type() Id() ListArgAux() | Empty()
+}
+
 void Lugosi () : {}
 { 
-  Func()
+  Main()
+  (Func())?
   <EOF>
 }
 
