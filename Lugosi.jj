@@ -48,7 +48,7 @@ TOKEN :
   <plus: "+">
   | <minus: "-">
   | <e: "E">
-  | <OP: ("+" | "-" | "*" | "/" | "&&" | "||" | "<" | ">" | "==")>
+  | <OPaux: ("*" | "/" | "&&" | "||" | "<" | ">" | "==")>
 //  | <ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])*>
 }
 
@@ -56,6 +56,11 @@ TOKEN :
 {
   <letra: ["a"-"z","A"-"Z"]>
   | <digito: ["0"-"9"]>
+}
+
+void Op (): {}
+{
+  <OPaux> | <minus> | <plus>
 }
 
 void Digits (): {}
@@ -124,7 +129,7 @@ void VarDecl (): {}
 
 void Exp(): {} 
 {
-  <APAR> Exp() <OP> Exp() <FPAR> |  Fator()
+  <APAR> Exp() Op() Exp() <FPAR> |  Fator()
 }
 
 void Fator(): {} 
