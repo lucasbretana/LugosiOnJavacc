@@ -65,17 +65,6 @@ TOKEN :
   <finalsublinhado: "_"(<letradigito>)+>
 }
 
-TOKEN :
-{
-  <ID: "id">
-}
-
-void Lugosi () : {}
-{ 
-  Test()
-
-}
-
 void Main (): {}
 {
  <MAIN> <ACHV> 
@@ -86,8 +75,8 @@ void Main (): {}
 
 void Comando(): {}
 { LOOKAHEAD(2)
-  <ID> <ATRIB> Exp() <FL>
-| <ID> <APAR> (ListaExp())? <FPAR> <FL>
+  Id() <ATRIB> Exp() <FL>
+| Id() <APAR> (ListaExp())? <FPAR> <FL>
 | <IF> <APAR> Exp() <FPAR> BlocoComando() <FL>
 | <WHILE> <APAR> Exp() <FPAR> <DO> BlocoComando() <FL>
 | <DO> BlocoComando() <WHILE> <APAR> Exp() <FPAR> <FL>
@@ -95,19 +84,18 @@ void Comando(): {}
 | <PRINT> <APAR> Exp() <FPAR> <FL>
 }
 void BlocoComando(): {} { <ACHV> (Comando())* <FCHV> }
-void ListaExp(): {} {<ID>} // With a single ID for test propouses
+void ListaExp(): {} {Id()} // With a single ID for test propouses
 
 // ---------------
-void Test (): {}
+
+void Id (): {}
 {
-  <letra>
-  <digito>
-  <digitos>
-  <facao_opt>
-  <expoente_opt>
-  <expoente_opt>
-  <expoente_opt>
-  <finalsublinhado>
+  (<letra>)(<letradigito>)*(<finalsublinhado>)*
+}
+
+void Literal (): {}
+{
+    <digitos><facao_opt><expoente_opt>
 }
 
 void Tipo (): {}
@@ -122,6 +110,36 @@ void Exp(): {}
 
 /*
 void Fator(): {}
-{<ID>}
-void ListaExp(): {} {<ID>} 
+{Id()}
+void ListaExp(): {} {Id()} 
 */
+void Test (): {}
+{
+  <letra>
+  <digito>
+  <digitos>
+  <facao_opt>
+  <expoente_opt>
+  <expoente_opt>
+  <expoente_opt>
+  <finalsublinhado>
+}
+void Test2 (): {}
+{
+  Id()
+  Id()
+  Literal()
+  Literal()
+  Literal()
+  Literal()
+  Literal()
+  Literal()
+  Literal()
+  Literal()
+}
+
+void Lugosi () : {}
+{ 
+  Literal()
+  Id()
+}
