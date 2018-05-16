@@ -42,24 +42,48 @@ TOKEN :
 
 TOKEN :
 {
- <OP: ("+" | "-" | "*" | "/" | "&&" | "||" | "<" | ">" | "==")>
-|< ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])*>
-
+  <OP: ("+" | "-" | "*" | "/" | "&&" | "||" | "<" | ">" | "==")>
+//  | <ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])*>
 }
 
+TOKEN :
+{
+  <letra: ["a"-"z","A"-"Z"]>
+  | <digito: ["0"-"9"]>
+}
 
+TOKEN :
+{
+  <digitos: (<digito>)+>
+  | <facao_opt: (","<digitos>)?>
+  | <expoente_opt: ("E" ("+"|"-")? <digitos>)?>
+  | <letradigito: (<letra> | <digito>)>
+}
 
-void Lugosi () :
-{}
+TOKEN :
+{
+  <finalsublinhado: "_"(<letradigito>)+>
+}
+
+void Lugosi () : {}
 { 
+  Test()
 
-  Main() 
-//Func()?
-  <EOF> 
 }
 
-void Main ():
-{}
+void Test (): {}
+{
+  <letra>
+  <digito>
+  <digitos>
+  <facao_opt>
+  <expoente_opt>
+  <expoente_opt>
+  <expoente_opt>
+  <finalsublinhado>
+}
+
+void Main (): {}
 {
  <MAIN> <ACHV> 
  
@@ -67,10 +91,20 @@ void Main ():
  // SeqComandos()
 
  <FCHV>
-
 }
 
+void Tipo (): {}
+{
+  ( <INT>|<BOOL>)*
+}
 
+void Exp(): {} 
+{
+  <APAR> Exp() <OP> Exp() <FPAR> //|  Fator()
+}
 
-
-
+/*
+void Fator(): {}
+{<ID>}
+void ListaExp(): {} {<ID>} 
+*/
