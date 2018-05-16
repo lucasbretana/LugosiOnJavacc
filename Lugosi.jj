@@ -134,12 +134,7 @@ void Fator(): {}
 
 void Func (): {}
 {
-  <FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() (Comando())* <FCHV> FuncAux()
-}
-
-void FuncAux (): {}
-{
-  Empty() | <FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() (Comando())* <FCHV> FuncAux()
+  (<FUNC> Type() Id() <APAR> (ListArg())? <FPAR> <ACHV> VarDecl() (Comando())* <FCHV>)
 }
 
 void Empty (): {}
@@ -149,12 +144,12 @@ void Empty (): {}
 
 void ListArg (): {}
 {
-  Type() Id() ListArgAux() //| ListArg() <COMMA> Type() Id()
+  Type() Id() (ListArgAux())* //| ListArg() <COMMA> Type() Id()
 }
 
 void ListArgAux (): {}
 {
-  <COMMA> Type() Id() ListArgAux() | Empty()
+  <COMMA> Type() Id()
 }
 
 void Lugosi () : {}
